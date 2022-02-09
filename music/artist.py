@@ -1,4 +1,4 @@
-from album import Album
+from music.album import Album
 
 
 class Artist:

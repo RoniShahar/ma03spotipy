@@ -1,10 +1,9 @@
 import zipfile
 import json
-
-from spotify_content import SpotifyContent
-from song import Song
-from album import Album
-from artist import Artist
+from music.spotify_content import SpotifyContent
+from music.song import Song
+from music.album import Album
+from music.artist import Artist
 
 
 def open_files_in_zip_file(file_path):

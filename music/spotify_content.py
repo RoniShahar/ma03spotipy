@@ -1,6 +1,6 @@
-from song import Song
-from album import Album
-from artist import Artist
+from music.song import Song
+from music.album import Album
+from music.artist import Artist
 
 
 class SpotifyContent:
