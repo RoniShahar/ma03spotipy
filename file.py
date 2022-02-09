@@ -1,11 +1,12 @@
 import configparser
+import json
 import logging
 import zipfile
-import json
-from music.spotify_content import SpotifyContent
-from music.song import Song
+
 from music.album import Album
 from music.artist import Artist
+from music.song import Song
+from music.spotify_content import SpotifyContent
 
 
 def read_config_file(path, section, parameter):
@@ -14,8 +15,9 @@ def read_config_file(path, section, parameter):
     return parser.get(section, parameter)
 
 
-#logging.basicConfig(filename=read_config_file('properties.properties', 'config', 'logs_file_path'), level=logging.DEBUG, format='%(asctiome)s - %(funcName)s - %(levelname)s - %(message)s')
+# logging.basicConfig(filename=read_config_file('properties.properties', 'config', 'logs_file_path'), level=logging.DEBUG, format='%(asctiome)s - %(funcName)s - %(levelname)s - %(message)s')
 logging.basicConfig(filename=read_config_file('properties.properties', 'config', 'logs_file_path'), level=logging.DEBUG)
+
 
 def open_files_in_zip_file(file_path):
     zip_file = zipfile.ZipFile(file_path)
@@ -43,3 +45,20 @@ def def_object_by_file_content(song_details):
     SpotifyContent.add_artist(artist, album)
     logging.debug(f'the artist: {artist.name} created')
 
+
+def load_file(path, message="file not exist"):
+    try:
+        file = open(path)
+        return json.load(file)
+    except:
+        print(message)
+
+
+"""def write_to_users_file():
+    json_string1 = json.dumps(User("roni").__dict__, indent=2)
+    json_string2 = json.dumps(User("amit").__dict__, indent=2)
+    with open('roni', 'w') as users_file:
+        users_file.write(json_string1)
+
+    with open('amit', 'w') as users_file:
+        users_file.write(json_string1)"""
