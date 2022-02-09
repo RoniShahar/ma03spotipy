@@ -1,8 +1,13 @@
 import zipfile
 import json
 
+from spotify_content import SpotifyContent
+from song import Song
+from album import Album
+from artist import Artist
 
-def read_zip_file(file_path):
+
+def open_files_in_zip_file(file_path):
     zip_file = zipfile.ZipFile(file_path)
     for file_info in zip_file.infolist():
         file = zip_file.open(file_info)
@@ -10,8 +15,14 @@ def read_zip_file(file_path):
 
 
 def read_json_file(file):
-    data = json.load(file)
-    for i in data['track']:
-        print(i)
-    file.close()
+    song_details = json.load(file)
+    song = Song(song_details['track']['id'], song_details['track']['name'], song_details['track']['popularity'])
+    SpotifyContent.add_song(song)
 
+    album = Album(song_details['track']['album']['id'], song_details['track']['album']['name'])
+    SpotifyContent.add_album(album, song)
+
+    artist = Artist(song_details['track']['artists'][0]['id'], song_details['track']['artists'][0]['name'])
+    SpotifyContent.add_artist(artist, album)
+
+    file.close()

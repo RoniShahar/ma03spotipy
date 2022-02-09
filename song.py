@@ -1,4 +1,4 @@
-class Song():
+class Song:
 
     def __init__(self, id, name, popularity):
         self.id = id

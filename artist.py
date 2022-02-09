@@ -1,9 +1,12 @@
 from album import Album
 
 
-class Artist():
+class Artist:
 
-    def __init__(self, id, name, albums: list[Album]):
+    def __init__(self, id, name):
         self.id = id
         self.name = name
-        self.albums = albums
+        self.albums = []
+
+    def add_album(self, album: Album):
+        self.albums.append(album)
