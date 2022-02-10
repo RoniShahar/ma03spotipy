@@ -120,3 +120,4 @@ def logout():
     User.user_name = ""
     User.playlists = []
     User.user_status = ""
+    print('logout complete successfully')
