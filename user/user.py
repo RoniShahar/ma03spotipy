@@ -1,7 +1,10 @@
-from file import load_file
+from file import load_file, read_config_file
 from user.playlist import Playlist
 from music.search import *
 from config_values import ConfigValues
+import logging
+
+logging.basicConfig(filename=read_config_file(parameter='logs_file_path'), level=logging.DEBUG)
 
 
 class User:
@@ -35,6 +38,7 @@ def check_if_user_exist():
     user_details = load_file(user_name, "this user name does not exist, you can try again or sign up :(")
     if user_details is not None:
         upload_user_details(user_details)
+        logging.debug(f'user: {user_name} log in successfully')
         advanced_menu()
     else:
         login_menu()
@@ -80,12 +84,14 @@ def add_new_playlist():
             print("this name already exist, playlist cannot be created")
         else:
             User.playlists.append(Playlist(playlist_name))
+            logging.debug(f'user: {User.user_name} add new playlist called {playlist_name}')
+            print(f'{playlist_name} playlist added successfully!')
     else:
         print("You've reached your playlist quota, playlist cannot be created :(")
 
 
 def add_song_to_playlist():
-    """playlist_name = input("Enter playlist name: ")
+    playlist_name = input("Enter playlist name: ")
     song_name = input("Enter song name: ")
     s, is_song_exist_in_spotipy = SpotifyContent.is_song_exist(song_name)
     if not is_song_exist_in_spotipy:
@@ -102,12 +108,15 @@ def add_song_to_playlist():
                     print(f'{song_name} already exist in {playlist_name} playlist')
                 else:
                     User.playlists[index].add_song(s.id)
+                    logging.debug(f'user: {User.user_name} add new song called {song_name} to {playlist_name} playlist')
+                    print(f'{song_name} added to {playlist_name} playlist successfully!')
             else:
-                print("You've reached your songs quota in this playlist, song cannot be added :(")"""
+                print("You've reached your songs quota in this playlist, song cannot be added :(")
 
 
 def logout():
     # write user playlist to file
+    logging.debug(f'user: {User.user_name} log out successfully')
     User.user_name = ""
     User.playlists = []
     User.user_status = ""

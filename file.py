@@ -15,7 +15,6 @@ def read_config_file(parameter, section='config', path='properties.properties'):
     return parser.get(section, parameter)
 
 
-# logging.basicConfig(filename=read_config_file('properties.properties', 'config', 'logs_file_path'), level=logging.DEBUG, format='%(asctiome)s - %(funcName)s - %(levelname)s - %(message)s')
 logging.basicConfig(filename=read_config_file(parameter='logs_file_path'), level=logging.DEBUG)
 
 
