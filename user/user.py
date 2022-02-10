@@ -46,6 +46,7 @@ def search_menu():
 class User:
     user_name = ""
     playlists = []
+    user_status = ""
 
     @staticmethod
     def add_playlist(playlist: Playlist):
@@ -79,6 +80,7 @@ def check_if_user_exist():
 
 def upload_user_details(user_details):
     User.user_name = user_details['user_name']
+    User.user_status = user_details['status']
 
     for playlist in user_details['playlists']:
         user_playlist = Playlist(playlist['name'])
@@ -139,3 +141,4 @@ def logout():
     #write to file user playlist
     User.user_name = ""
     User.playlists = []
+    User.user_status = ""
