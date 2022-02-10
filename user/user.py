@@ -1,7 +1,5 @@
 from file import load_file
 from menu.menu import *
-from music.song import Song
-from music.spotify_content import SpotifyContent
 from user.playlist import Playlist
 from music.search import *
 
@@ -27,6 +25,7 @@ def advanced_menu():
     menu.append_item(item5)
     menu.show()
 
+
 def search_menu():
     menu = ConsoleMenu('Welcome to Spotipy', show_exit_option=False)
     item1 = FunctionItem("show all artists in spotipy", get_all_artists)
@@ -40,7 +39,6 @@ def search_menu():
     menu.append_item(item4)
     menu.append_item(item5)
     menu.show()
-
 
 
 class User:
@@ -105,18 +103,22 @@ def print_user_playlists():
 
 
 def add_new_playlist():
-    playlist_name = input("Enter name for your new playlist:")
-    is_name_exist = False
-    if User.user_name != "":
-        for playlist in User.playlists:
-            if playlist.name == playlist_name:
-                is_name_exist = True
+    x = len(User.playlists)
+    if len(User.playlists) < 5:
+        playlist_name = input("Enter name for your new playlist:")
+        is_name_exist = False
+        if User.user_name != "":
+            for playlist in User.playlists:
+                if playlist.name == playlist_name:
+                    is_name_exist = True
 
-    if is_name_exist:
-        print("this name already exist, playlist cannot be created")
-        advanced_menu()
+        if is_name_exist:
+            print("this name already exist, playlist cannot be created")
+            advanced_menu()
+        else:
+            User.playlists.append(Playlist(playlist))
     else:
-        User.playlists.append(Playlist(playlist))
+        print("You've reached your playlist quota, playlist cannot be created :(")
 
 
 def add_song_to_playlist():
@@ -130,15 +132,18 @@ def add_song_to_playlist():
         if not is_playlist_exist:
             print(f'{playlist_name} playlist not exist')
         else:
-            is_song_exist_in_chosen_playlist = User.is_song_exist_in_given_playlist(index, s.id)
-            if is_song_exist_in_chosen_playlist:
-                print(f'{song_name} already exist in {playlist_name} playlist')
+            if len(User.playlists[index].songs) < 2:
+                is_song_exist_in_chosen_playlist = User.is_song_exist_in_given_playlist(index, s.id)
+                if is_song_exist_in_chosen_playlist:
+                    print(f'{song_name} already exist in {playlist_name} playlist')
+                else:
+                    User.playlists[index].add_song(s.id)
             else:
-                User.playlists[index].add_song(s.id)
+                print("You've reached your songs quota in this playlist, song cannot be added :(")
 
 
 def logout():
-    #write to file user playlist
+    # write user playlist to file
     User.user_name = ""
     User.playlists = []
     User.user_status = ""

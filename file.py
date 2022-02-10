@@ -53,13 +53,3 @@ def load_file(path, message="file not exist"):
     except:
         print(message)
         return None
-
-
-"""def write_to_users_file():
-    json_string1 = json.dumps(User("roni").__dict__, indent=2)
-    json_string2 = json.dumps(User("amit").__dict__, indent=2)
-    with open('roni', 'w') as users_file:
-        users_file.write(json_string1)
-
-    with open('amit', 'w') as users_file:
-        users_file.write(json_string1)"""
