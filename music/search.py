@@ -1,3 +1,4 @@
+from config_values import ConfigValues
 from music.spotify_content import SpotifyContent
 
 
@@ -17,8 +18,9 @@ def get_artist_albums():
         print("sorry, artist not exist :(")
 
 
-def get_top_ten_songs_of_artist(num_of_returned_record=10):
+def get_top_songs_of_artist():
     from user.user import User
+    num_of_returned_record = ConfigValues.num_of_top_songs_to_display
     artist_name = input("Enter artist name: ")
     songs = []
     for artist in SpotifyContent.artists:
@@ -26,8 +28,8 @@ def get_top_ten_songs_of_artist(num_of_returned_record=10):
             for album in artist.albums:
                 for song in album.songs:
                     songs.append(song)
-    if User.user_status == "f":
-        num_of_returned_record = num_of_items_printed_in_search_for_free_users()
+    if User.user_status == ConfigValues.free_user:
+        num_of_returned_record = ConfigValues.num_of_items_printed_in_search_for_free_users
     songs = sorted(songs, key=lambda x: x.popularity, reverse=True)[:num_of_returned_record]
     print(list(map((lambda x: x.name), songs)))
 
@@ -41,17 +43,11 @@ def get_album_songs():
         print("sorry, album not exist :(")
 
 
-def print_sorted(list, sep="\n"):
+def print_sorted(music_objects, sep="\n"):
     from user.user import User
-    list.sort()
-    if User.user_status == "f":
-        num_of_items_to_print = num_of_items_printed_in_search_for_free_users()
-        print(*(list[:num_of_items_to_print]), sep=sep)
+    music_objects.sort()
+    if User.user_status == ConfigValues.free_user:
+        num_of_items_to_print = ConfigValues.num_of_items_printed_in_search_for_free_users
+        print(*(music_objects[:num_of_items_to_print]), sep=sep)
     else:
-        print(*list, sep=sep)
-
-
-def num_of_items_printed_in_search_for_free_users():
-    from file import read_config_file
-    return int(read_config_file('properties.properties', 'config', 'num_of_items_printed_in_search'))
-
+        print(*music_objects, sep=sep)

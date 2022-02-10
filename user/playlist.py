@@ -9,4 +9,3 @@ class Playlist:
 
     def add_song(self, song: Song):
         self.songs.append(song)
-

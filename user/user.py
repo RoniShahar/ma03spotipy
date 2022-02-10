@@ -1,44 +1,7 @@
 from file import load_file
-from menu.menu import *
 from user.playlist import Playlist
 from music.search import *
-
-
-def login_menu():
-    menu = ConsoleMenu("Login")
-    login_item = FunctionItem("Login", check_if_user_exist, should_exit=True)
-    menu.append_item(login_item)
-    menu.show()
-
-
-def advanced_menu():
-    menu = ConsoleMenu('Welcome to Spotipy', show_exit_option=False)
-    item1 = FunctionItem("See existing playlists", print_user_playlists)
-    item2 = FunctionItem("add new playlist", add_new_playlist)
-    item3 = FunctionItem("add song to playlist", add_song_to_playlist)
-    item4 = FunctionItem("search in spotipy", search_menu)
-    item5 = FunctionItem("logout", logout, should_exit=True)
-    menu.append_item(item1)
-    menu.append_item(item2)
-    menu.append_item(item3)
-    menu.append_item(item4)
-    menu.append_item(item5)
-    menu.show()
-
-
-def search_menu():
-    menu = ConsoleMenu('Welcome to Spotipy', show_exit_option=False)
-    item1 = FunctionItem("show all artists in spotipy", get_all_artists)
-    item2 = FunctionItem("look for albums by artist", get_artist_albums)
-    item3 = FunctionItem("show top 10 songs of artist", get_top_ten_songs_of_artist)
-    item4 = FunctionItem("look for songs by album", get_album_songs)
-    item5 = FunctionItem("return to main menu", advanced_menu)
-    menu.append_item(item1)
-    menu.append_item(item2)
-    menu.append_item(item3)
-    menu.append_item(item4)
-    menu.append_item(item5)
-    menu.show()
+from config_values import ConfigValues
 
 
 class User:
@@ -66,6 +29,7 @@ class User:
 
 
 def check_if_user_exist():
+    from menu.menu import advanced_menu, login_menu
     user_name = input("enter your user name:")
 
     user_details = load_file(user_name, "this user name does not exist, you can try again or sign up :(")
@@ -103,26 +67,25 @@ def print_user_playlists():
 
 
 def add_new_playlist():
-    x = len(User.playlists)
-    if len(User.playlists) < 5:
+    if ((User.user_status == ConfigValues.free_user and (
+            len(User.playlists) < ConfigValues.num_of_max_playlists_for_free_user)) or (
+            User.user_status == ConfigValues.premium_user)):
         playlist_name = input("Enter name for your new playlist:")
         is_name_exist = False
         if User.user_name != "":
             for playlist in User.playlists:
                 if playlist.name == playlist_name:
                     is_name_exist = True
-
         if is_name_exist:
             print("this name already exist, playlist cannot be created")
-            advanced_menu()
         else:
-            User.playlists.append(Playlist(playlist))
+            User.playlists.append(Playlist(playlist_name))
     else:
         print("You've reached your playlist quota, playlist cannot be created :(")
 
 
 def add_song_to_playlist():
-    playlist_name = input("Enter playlist name: ")
+    """playlist_name = input("Enter playlist name: ")
     song_name = input("Enter song name: ")
     s, is_song_exist_in_spotipy = SpotifyContent.is_song_exist(song_name)
     if not is_song_exist_in_spotipy:
@@ -132,14 +95,15 @@ def add_song_to_playlist():
         if not is_playlist_exist:
             print(f'{playlist_name} playlist not exist')
         else:
-            if len(User.playlists[index].songs) < 2:
+            if ((User.user_status == ConfigValues.free_user and len(User.playlists[
+                                                                        index].songs) < ConfigValues.num_of_max_songs_in_playlist_for_free_user) or User.user_status == ConfigValues.premium_user):
                 is_song_exist_in_chosen_playlist = User.is_song_exist_in_given_playlist(index, s.id)
                 if is_song_exist_in_chosen_playlist:
                     print(f'{song_name} already exist in {playlist_name} playlist')
                 else:
                     User.playlists[index].add_song(s.id)
             else:
-                print("You've reached your songs quota in this playlist, song cannot be added :(")
+                print("You've reached your songs quota in this playlist, song cannot be added :(")"""
 
 
 def logout():

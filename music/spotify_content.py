@@ -1,6 +1,6 @@
-from music.song import Song
 from music.album import Album
 from music.artist import Artist
+from music.song import Song
 
 
 class SpotifyContent:
@@ -35,9 +35,9 @@ class SpotifyContent:
 
     @staticmethod
     def is_song_exist(song_name: str):
-        for s in SpotifyContent.songs:
-            if song_name == s.name:
-                return s, True
+        for song in SpotifyContent.songs:
+            if song_name == song.name:
+                return song, True
         return None, False
 
     @staticmethod
