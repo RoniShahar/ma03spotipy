@@ -52,6 +52,7 @@ def load_file(path, message="file not exist"):
         return json.load(file)
     except:
         print(message)
+        return None
 
 
 """def write_to_users_file():
